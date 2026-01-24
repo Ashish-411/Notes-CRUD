@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api";
+import "../styles/register.css";
 
 function Register(){
      const [name, setUsername] = useState("");
@@ -27,27 +28,36 @@ function Register(){
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <input
-                type="text"
-                placeholder="Username"
-                value={name}
-                onChange={e => setUsername(e.target.value)}
-            />
-            <input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-            />
-            <input
-                type="email"
-                placeholder="email"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-            />
-            <button type="submit">Login</button>
-        </form>
+        <div className="register-container">
+            <form className="register-from" onSubmit={handleSubmit}>
+                <h1 className="register-title">Register</h1>
+                <input
+                    type="text"
+                    placeholder="Username"
+                    value={name}
+                    onChange={e => setUsername(e.target.value)}
+                    className="register-input"
+                    required
+                />
+                <input
+                    type="password"
+                    placeholder="Password"
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}
+                    className="register-input"
+                    required
+                />
+                <input
+                    type="email"
+                    placeholder="email"
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    className="register-input"
+                    required
+                />
+                <button type="submit" className="register1-btn">Register</button>
+            </form>
+        </div>
     );
 
 }

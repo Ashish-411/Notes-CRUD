@@ -1,6 +1,7 @@
 import { useState } from "react";
 import api from "../api";
 import { NavLink, useNavigate } from "react-router-dom";
+import "../styles/login.css";
 
 function Login() {
     const [username, setUsername] = useState("");
@@ -29,25 +30,34 @@ function Login() {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <input
-                type="text"
-                placeholder="Username"
-                value={username}
-                onChange={e => setUsername(e.target.value)}
-            />
-            <input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-            />
-            <button type="submit">Login</button>
-            <NavLink to ="/register">
-                <button type="button">Register</button>
-            </NavLink>
+        <div className="login-container">
+            <form className="login-from" onSubmit={handleSubmit}>
+                <h1 className="login-title">Login</h1>
+                <input
+                    type="text"
+                    placeholder="Username"
+                    id="username"
+                    className="login-input"
+                    value={username}
+                    onChange={e => setUsername(e.target.value)}
+                />
+                <input
+                    type="password"
+                    id="password"
+                    className="login-input"
+                    placeholder="Password"
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}
+                />
+                <div className="btn">
+                    <button type="submit" className="login-btn">Login</button>
+                    <NavLink to ="/register" className="register-btn">
+                       Register
+                    </NavLink>
+                </div>
 
-        </form>
+            </form>
+        </div>
     );
 }
 
