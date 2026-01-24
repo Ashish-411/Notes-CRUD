@@ -1,0 +1,14 @@
+.notes-list {
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    padding: 0;
+    margin: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.notes-list li {
+    flex: 1 1/* responsive width for cards */
+}
