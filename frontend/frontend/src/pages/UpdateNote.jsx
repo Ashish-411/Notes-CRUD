@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams,useNavigate } from "react-router-dom";
 import api from "../api";
+import { messageToast } from "../components/messageToast";
+import { confirmToast } from "../components/checkToast";
 function UpdateNote(){
     const [title, setTitle] = useState("");
     const [text_content, setTextContent] = useState("");
@@ -23,16 +25,22 @@ function UpdateNote(){
         },[]);
     const handleSubmit = async(e) =>{
         e.preventDefault();
+        const confirm = await confirmToast("Are you sure you want to update?");
+        if(!confirm) return;
         try{
-            await api.put(`/notes/${note_id}`,{
+            const res = await api.put(`/notes/${note_id}`,{
                 title,
                 text_content,
             })
             console.log({title,text_content});
             setTitle("");
             setTextContent("");
+            if(res.status===200){
+                messageToast("Updated Successfully","success");
+            }
             navigate("/");
         }catch(err){
+            messageToast(err.message,"error");
             console.error("Error Updating note: ", err.response?.date || err);
         }
     }
@@ -59,11 +67,7 @@ function UpdateNote(){
                 <button 
                     type="submit" 
                     className="note-submit-btn"
-                    onClick={()=>{
-                        if(window.confirm("Are you sure you want to update this note")){
-                            return;
-                        }
-                    }}>Update</button>
+                    onClick={handleSubmit}>Update</button>
             </form>
         </section>
     );

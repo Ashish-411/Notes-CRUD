@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api";
 import "../styles/register.css";
+import { messageToast } from "../components/messageToast";
 
 function Register(){
      const [name, setUsername] = useState("");
@@ -19,10 +20,12 @@ function Register(){
                 password,
                 email
             });
-
+            if(res.status===201){
+                messageToast("You have been registered","success");
+            }
             navigate("/login");
         } catch (err) {
-            alert("Registration filed");
+            messageToast(err.message,"error");
             console.log(err);
         }
     };

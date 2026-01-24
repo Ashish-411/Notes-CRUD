@@ -1,22 +1,28 @@
 import { useState } from "react";
 import api from "../api";
 import "../styles/createnote.css";
+import { messageToast } from "../components/messageToast";
 function CreateNote(){
     const [title, setTitle] = useState("");
     const [text_content, setTextContent] = useState("");
+    const notify = () => toast("note created");
 
-    const handleSubmit = (e) =>{
+    const handleSubmit = async(e) =>{
         e.preventDefault();
         try{
-            api.post("/notes/",{
+            const res = await api.post("/notes/",{
                 title,
                 text_content,
             })
-            console.log({title,text_content});
+            console.log(res);
+            messageToast("Note Created","success");
             setTitle("");
             setTextContent("");
         }catch(err){
-            console.error("Error creating note: ", err.response?.date || err);
+            if(err.response && err.response.status === 401){
+                messageToast("Note is not created","error");
+            }
+            conmsole.error("Error creating note: ", err.response?.date || err);
         }
     }
     return (

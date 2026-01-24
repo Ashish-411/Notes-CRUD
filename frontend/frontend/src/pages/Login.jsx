@@ -2,6 +2,7 @@ import { useState } from "react";
 import api from "../api";
 import { NavLink, useNavigate } from "react-router-dom";
 import "../styles/login.css";
+import { messageToast } from "../components/messageToast";
 
 function Login() {
     const [username, setUsername] = useState("");
@@ -22,10 +23,17 @@ function Login() {
                 }
             });
             localStorage.setItem("token", res.data.access_token);
-
+            if(res.status === 200){
+                messageToast("Login Successfull","success");
+            }
             navigate("/");
         } catch (err) {
-            alert("Invalid credentials");
+            if(err.response && err.response.status === 401){
+                messageToast("Invalid Username or Password","error");
+            }else{
+                messageToast("something went wrong!","error");
+            }
+            console.log(err);
         }
     };
 

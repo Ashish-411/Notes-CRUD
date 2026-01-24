@@ -3,17 +3,20 @@ import { RxUpdate } from "react-icons/rx";
 import "../styles/note.css";
 import api from "../api";
 import { useNavigate } from "react-router-dom";
-
+import { confirmToast } from "./checkToast";
+import { messageToast } from "./messageToast";
 function Note({note_id, title,text_content, onDelete}){
     const navigate = useNavigate();
     const handleDelete = async() =>{
-        const message = await api.delete(`/notes/${note_id}`);
-        onDelete();
-        console.log(message);
-    }
-    function checkDelete(){
-        if(window.confirm("Are you sure you want to delete")){
-            handleDelete();
+        const confirm = await confirmToast("Are You Sure You Want to Delete?");
+        if(!confirm) return;
+        try{
+            const res = await api.delete(`/notes/${note_id}`);
+            onDelete();
+            messageToast(res.data.message,"success");
+
+        }catch(err){
+            console.log(err);
         }
     }
     function handleUpdate(note_id){
@@ -29,7 +32,7 @@ function Note({note_id, title,text_content, onDelete}){
                         onClick={()=>handleUpdate(note_id)}/>
                     <MdDelete 
                         className = "note-icon delete-icon"
-                        onClick={checkDelete}/>
+                        onClick={handleDelete}/>
                 </div>
             </div>
             <div className="note-body">
