@@ -23,10 +23,7 @@ export function messageToast(message, type = "info") {
   }
 }
 
-/**
- * ToastContainer component
- * Place this once in your App.jsx
- */
+// /*ToastContainer component*/
 export function MessageToastContainer() {
   return (
     <ToastContainer

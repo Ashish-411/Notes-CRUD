@@ -39,6 +39,11 @@ async def create_user(request: createUser):
         async with db.pool.acquire() as conn:
             user = await conn.fetchrow(query,request.name,hashed_pw,request.email)
         return User(**(dict(user)))
+    except asyncpg.UniqueViolationError as e:
+        if 'name' in e.detail:
+            raise HTTPException(status_code=400,detail="Username already Exists")
+        elif 'email' in e.detail:
+            raise HTTPException(status_code=400,detail="Email already Exists")
     except asyncpg.PostgresError as e:
         raise HTTPException(status_code=500, detail=e)
     

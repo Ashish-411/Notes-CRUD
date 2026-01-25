@@ -8,6 +8,8 @@ function Register(){
      const [name, setUsername] = useState("");
      const [password, setPassword] = useState("");
      const [email, setEmail] = useState("");
+     const [nameError,setNameError] = useState(false);
+     const [emailError,setEmailError] = useState(false);
 
     const navigate = useNavigate();
 
@@ -20,13 +22,29 @@ function Register(){
                 password,
                 email
             });
+            console.log(res);
             if(res.status===201){
                 messageToast("You have been registered","success");
             }
             navigate("/login");
         } catch (err) {
-            messageToast(err.message,"error");
-            console.log(err);
+            const msg = err.response?.data?.detail;
+            if(err.response?.status === 400
+                 && msg === "Username already Exists"){
+                    setNameError(true);
+                    setEmailError(false);
+                    messageToast(msg,"error");
+                 }
+            else if(err.response?.status === 400
+                 && msg === 'Email already Exists'){
+                    setNameError(false);
+                    setEmailError(true);
+                    messageToast(msg,"error");
+                 }
+            else{
+                messageToast(err.message,"error");
+                console.log(err.response.data.detail);
+            }
         }
     };
 
@@ -40,6 +58,7 @@ function Register(){
                     value={name}
                     onChange={e => setUsername(e.target.value)}
                     className="register-input"
+                    style ={{borderColor: nameError?"red":"black"}}
                     required
                 />
                 <input
@@ -48,6 +67,8 @@ function Register(){
                     value={password}
                     onChange={e => setPassword(e.target.value)}
                     className="register-input"
+                    style ={{borderColor: emailError?"red":"black"}}
+
                     required
                 />
                 <input
