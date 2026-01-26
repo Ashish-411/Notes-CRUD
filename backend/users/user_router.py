@@ -16,11 +16,7 @@ router = APIRouter(
 
 tablename = 'users'
 
-#email service
-SMTP_HOST ='smtp.gmail.com'
-SMTP_PORT = 587
-SMTP_USER = 'malekuastha@gmail.com'
-SMTP_PASS = 'zonowbgvtseprlsp'
+
 
 #Send email
 async def send_welcome_email(name: str, to_email:str):
