@@ -5,6 +5,9 @@ from auth import hash_password,verify_password,create_access_token,decode_access
 import database as db
 import asyncpg
 from fastapi.security import OAuth2PasswordBearer,OAuth2PasswordRequestForm
+from email.message import EmailMessage
+import aiosmtplib
+from fastapi import BackgroundTasks
 
 router = APIRouter(
     tags = ['users'],
@@ -12,6 +15,39 @@ router = APIRouter(
 )
 
 tablename = 'users'
+
+#email service
+SMTP_HOST ='smtp.gmail.com'
+SMTP_PORT = 587
+SMTP_USER = 'malekuastha@gmail.com'
+SMTP_PASS = 'zonowbgvtseprlsp'
+
+#Send email
+async def send_welcome_email(name: str, to_email:str):
+    if not to_email:
+        return
+    message = EmailMessage()
+    message["From"] = SMTP_USER
+    message["To"] = to_email
+    message["Subject"] = "Welcome to MyNotes App"
+
+    message.set_content(f"""
+    Hello 👋 {name}
+    your account has been successfully created.
+
+    Welcome to MyNotes!
+    Thanks,
+    MyNotes Team
+    """)
+    await aiosmtplib.send(
+        message,
+        hostname=SMTP_HOST,
+        port=SMTP_PORT,
+        start_tls=True,
+        username=SMTP_USER,
+        password=SMTP_PASS,
+    )
+#get users
 @router.get("/",response_model=List[User])
 async def get_users():
     query = f"""
@@ -26,9 +62,11 @@ async def get_users():
         return [dict(user) for user in users]
     except asyncpg.PostgresError as e:
         raise HTTPException(status_code=500, detail=e)
+    
 
+#Create and register user
 @router.post('/',response_model=User)
-async def create_user(request: createUser):
+async def create_user(request: createUser, background_tasks:BackgroundTasks):
     hashed_pw = hash_password(request.password)
     query = f"""
         INSERT INTO {tablename}(name,password,email)
@@ -38,6 +76,8 @@ async def create_user(request: createUser):
     try:
         async with db.pool.acquire() as conn:
             user = await conn.fetchrow(query,request.name,hashed_pw,request.email)
+            #send registration email
+            background_tasks.add_task(send_welcome_email,user["name"],user["email"])
         return User(**(dict(user)))
     except asyncpg.UniqueViolationError as e:
         if 'name' in e.detail:
@@ -46,6 +86,7 @@ async def create_user(request: createUser):
             raise HTTPException(status_code=400,detail="Email already Exists")
     except asyncpg.PostgresError as e:
         raise HTTPException(status_code=500, detail=e)
+    
     
 @router.post("/login")
 async def login(form_data: OAuth2PasswordRequestForm = Depends()):
