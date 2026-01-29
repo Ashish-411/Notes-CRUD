@@ -39,7 +39,7 @@ function Login() {
 
     return (
         <div className="login-container">
-            <form className="login-from" onSubmit={handleSubmit}>
+            <form className="login-form" onSubmit={handleSubmit}>
                 <h1 className="login-title">Login</h1>
                 <input
                     type="text"
@@ -48,6 +48,7 @@ function Login() {
                     className="login-input"
                     value={username}
                     onChange={e => setUsername(e.target.value)}
+                    required
                 />
                 <input
                     type="password"
@@ -56,11 +57,12 @@ function Login() {
                     placeholder="Password"
                     value={password}
                     onChange={e => setPassword(e.target.value)}
+                    required
                 />
                 <div className="btn">
                     <button type="submit" className="login-btn">Login</button>
                     <NavLink to ="/register" className="register-btn">
-                       Register
+                       Register Page
                     </NavLink>
                 </div>
 

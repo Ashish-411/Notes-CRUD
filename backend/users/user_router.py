@@ -19,6 +19,8 @@ tablename = 'users'
 
 
 #Send email
+
+#email service
 async def send_welcome_email(name: str, to_email:str):
     if not to_email:
         return

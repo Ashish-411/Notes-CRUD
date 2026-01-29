@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import api from "../api";
 import "../styles/register.css";
 import { messageToast } from "../components/messageToast";
+import {NavLink} from 'react-router-dom';
 
 function Register(){
      const [name, setUsername] = useState("");
@@ -23,7 +24,7 @@ function Register(){
                 email
             });
             console.log(res);
-            if(res.status===201){
+            if(res.status===200){
                 messageToast("You have been registered","success");
             }
             navigate("/login");
@@ -50,7 +51,7 @@ function Register(){
 
     return (
         <div className="register-container">
-            <form className="register-from" onSubmit={handleSubmit}>
+            <form className="register-form" onSubmit={handleSubmit}>
                 <h1 className="register-title">Register</h1>
                 <input
                     type="text"
@@ -79,7 +80,12 @@ function Register(){
                     className="register-input"
                     required
                 />
-                <button type="submit" className="register1-btn">Register</button>
+                <div className="btn">
+                    <button type="submit" className="register1-btn">Register</button>
+                    <NavLink to ="/login" className="login1-btn">
+                       Login Page
+                    </NavLink>
+                </div>
             </form>
         </div>
     );

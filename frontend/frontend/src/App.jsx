@@ -6,6 +6,7 @@ import Register from "./pages/Register";
 import Header from "./components/Header";
 import CreateNote from "./pages/CreateNote";
 import UpdateNote from "./pages/UpdateNote";
+import Error from "./pages/Error";
 import { MessageToastContainer } from "./components/messageToast";
 function RegisterandLogout(){
   localStorage.clear();
@@ -26,6 +27,7 @@ function App() {
           </Route>
           <Route path = "/update-note/:note_id" element={<UpdateNote/>}/>
         </Route>
+        <Route path = "*" element={<Error/>}/>
      </Routes>
     </>
   )
