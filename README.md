@@ -1,2 +1,2 @@
 ## Screenshot
-(login.png)
+<img src="login.png" width="600" />
