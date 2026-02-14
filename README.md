@@ -1,3 +1,2 @@
 ## Screenshot
-
-![App Screenshot](login.png)
+(login.png)
